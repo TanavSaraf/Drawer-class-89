@@ -1,14 +1,15 @@
 import React from "react";
-import TabNav from "./tabNavigator";
+import StackFunction from "./stackNav";
 import Profile from "../screens/Profile";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 
 const Drawer = createDrawerNavigator();
 const DrawerFunction = () => {
   return (
-    <Drawer.Navigator>
-      <Drawer.Screen name="profile" component={Profile} />
-      <Drawer.Screen name="TabNav" component={TabNav} />
+    <Drawer.Navigator screenOptions={{headerShown:false}} >
+     
+      <Drawer.Screen name="Home" component={StackFunction} />
+      <Drawer.Screen name="Profile" component={Profile} />
     </Drawer.Navigator>
   );
 };

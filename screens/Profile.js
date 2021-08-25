@@ -1,11 +1,13 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, StyleSheet, Text, View,StatusBar,Platform } from "react-native";
 
 export default class Profile extends React.Component {
   render() {
     return (
       <View style={styles.container}>
+        <SafeAreaView style={styles.droidSafeArea}/>
         <Text>Profilee</Text>
+        
       </View>
     );
   }
@@ -16,4 +18,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  droidSafeArea: { marginTop: Platform.OS === "android" ? StatusBar.currentHeight : RFValue(35) },
 });
