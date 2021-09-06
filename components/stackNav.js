@@ -8,7 +8,7 @@ const StackFunction = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown:false}}>
      
-      <Stack.Screen name="Feed" component={TabNav} />
+      <Stack.Screen name="TabNav" component={TabNav} />
       <Stack.Screen name='FullStory' component={Read}/>
     </Stack.Navigator>
   );
