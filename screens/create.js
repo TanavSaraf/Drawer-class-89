@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import { RFValue } from "react-native-responsive-fontsize";
 import * as Font from "expo-font";
-
+import firebase from 'firebase';
 import DropDownPicker from "react-native-dropdown-picker";
 
 let customFonts = {
@@ -32,15 +32,31 @@ export default class FeedRead extends React.Component {
       story: "",
       moral: "",
       open: false,
+      lightTheme:true
     };
   }
   async loadFontAsync() {
     await Font.loadAsync(customFonts);
     this.setState({ fontsLoaded: true });
-  }
-
+  };
+  fetchUser =  () => {
+    var theme
+    firebase
+      .database()
+      .ref("users/" + firebase.auth().currentUser.uid)
+      .on("value", (data) => {
+        theme = data.val().currentTheme;
+      });
+      console.log(theme)
+    this.setState({
+      lightTheme: theme == "light" ? true : false,
+      
+    });
+  };
+  
   componentDidMount() {
     this.loadFontAsync();
+    this.fetchUser()
   }
 
   render() {
@@ -53,7 +69,7 @@ export default class FeedRead extends React.Component {
         image_5: require("../assets/story_image_5.png"),
       };
       return (
-        <View style={styles.container}>
+        <View style={this.state.lightTheme?styles.container:[styles.container,{backgroundColor:'grey'}]}>
           <SafeAreaView style={styles.droidSafeArea} />
           <Text style={styles.title}>Create Story</Text>
           <ScrollView>

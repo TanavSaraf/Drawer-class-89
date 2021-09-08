@@ -5,12 +5,40 @@ import CreateStory from "../screens/create";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import { RFValue } from "react-native-responsive-fontsize";
+import firebase from 'firebase';
 const TabNav = createMaterialBottomTabNavigator();
-const BottomTabNav = () => {
-  return (
+export default class BottomTabNav extends  React.Component {
+
+  constructor(){
+    super()
+    this.state={
+      lightTheme:true
+    }
+  }
+  fetchUser =  () => {
+    var theme
+    firebase
+      .database()
+      .ref("users/" + firebase.auth().currentUser.uid)
+      .on("value", (data) => {
+        theme = data.val().currentTheme;
+      });
+      console.log(theme)
+    this.setState({
+      lightTheme: theme == "light" ? true : false,
+      
+    });
+  };
+  componentDidMount(){
+    this.fetchUser()
+    
+  }
+  render(){
+
+    return (
     <TabNav.Navigator
       labeled={false}
-      barStyle={styles.bottomTabStyle}
+      barStyle={this.state.lightTheme?styles.bottomTabStyle:styles.bottomTabStyleLT}
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color }) => {
           var iconName;
@@ -28,11 +56,12 @@ const BottomTabNav = () => {
       <TabNav.Screen name="feed" component={Feed} />
       <TabNav.Screen name="create" component={CreateStory} />
     </TabNav.Navigator>
-  );
+  );}
 };
-export default BottomTabNav;
+
 
 var styles = StyleSheet.create({
-  bottomTabStyle: { borderTopLeftRadius: 20, backgroundColor: "aqua",height:'8%',position:'absolute',overflow:'hidden' },
+  bottomTabStyle: { borderTopLeftRadius: 20,borderTopRightRadius: 20, backgroundColor: "aqua",height:'8%',position:'absolute',overflow:'hidden' },
+  bottomTabStyleLT: { borderTopLeftRadius: 20,borderTopRightRadius: 20, backgroundColor: "white",height:'8%',position:'absolute',overflow:'hidden' },
   icon:{width:RFValue(30),height:RFValue(40)}
 });

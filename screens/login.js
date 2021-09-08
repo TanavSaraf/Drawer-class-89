@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   StatusBar,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import { RFValue } from "react-native-responsive-fontsize";
 import * as Font from "expo-font";
@@ -108,13 +109,16 @@ export default class Login extends React.Component {
   };
   render() {
     return (
-      <View>
+      <View style={styles.container}>
         <SafeAreaView style={ styles.droidSafeArea}/>
-        <TouchableOpacity
+
+        <Image source={require('../assets/logo.png')} style={{alignSelf:'center',width:'100%',height:'70%'}}/>
+        <TouchableOpacity style={styles.button}
           onPress={() => {
             this.signInWithGoogleAsync();
           }}
         >
+          <Image source={require('../assets/google_icon.png')} style={{width:RFValue(20),height:RFValue(20)}}/>
           <Text style={styles.title}>SIGN IN WITH GOOGLE</Text>
         </TouchableOpacity>
       </View>
@@ -124,11 +128,9 @@ export default class Login extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    margin: 2,
-    borderWidth: 2,
-    backgroundColor: "#0009ff",
-    borderRadius: 20,
-    margin: 10,
+    justifyContent:'center',
+    backgroundColor: "navy",
+   
   },
   droidSafeArea: {
     marginTop:
@@ -136,11 +138,11 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: "bubblegum-sans",
-    fontSize: RFValue(10),
-    color: "black",
-    borderWidth: 2,
-    borderRadius: 5,
+    fontSize: RFValue(20),
+    color: "white",
+    
     margin: 10,
     textAlign: "center",
   },
+  button:{padding:5,alignItems:'center',alignSelf:'center',flexDirection:'row',borderWidth:0.5,borderRadius:3,marginTop:RFValue(30)},
 });
