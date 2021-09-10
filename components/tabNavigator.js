@@ -22,12 +22,13 @@ export default class BottomTabNav extends  React.Component {
       .ref("users/" + firebase.auth().currentUser.uid)
       .on("value", (data) => {
         theme = data.val().currentTheme;
+        this.setState({
+          lightTheme: theme == "light" ? true : false,
+          
+        })
       });
       console.log(theme)
-    this.setState({
-      lightTheme: theme == "light" ? true : false,
-      
-    });
+   ;
   };
   componentDidMount(){
     this.fetchUser()

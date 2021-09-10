@@ -16,7 +16,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 let customFonts = {
   "bubblegum-sans": require("../assets/fonts/BubblegumSans-Regular.ttf"),
 };
-let stories = require("../temp_stories.json");
+
 export default class Read extends React.Component {
   constructor() {
     super();

@@ -10,11 +10,13 @@ import {
   SafeAreaView,
   Platform,
   StatusBar,
+  Alert,
 } from "react-native";
 import { RFValue } from "react-native-responsive-fontsize";
 import * as Font from "expo-font";
-import firebase from 'firebase';
+import firebase from "firebase";
 import DropDownPicker from "react-native-dropdown-picker";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 let customFonts = {
   "bubblegum-sans": require("../assets/fonts/BubblegumSans-Regular.ttf"),
@@ -32,33 +34,63 @@ export default class FeedRead extends React.Component {
       story: "",
       moral: "",
       open: false,
-      lightTheme:true
+      lightTheme: true,
     };
   }
   async loadFontAsync() {
     await Font.loadAsync(customFonts);
     this.setState({ fontsLoaded: true });
-  };
-  fetchUser =  () => {
-    var theme
+  }
+  fetchUser = () => {
+    var theme;
     firebase
       .database()
       .ref("users/" + firebase.auth().currentUser.uid)
       .on("value", (data) => {
         theme = data.val().currentTheme;
       });
-      console.log(theme)
+    console.log(theme);
     this.setState({
       lightTheme: theme == "light" ? true : false,
-      
     });
   };
-  
+
   componentDidMount() {
     this.loadFontAsync();
-    this.fetchUser()
+    this.fetchUser();
   }
-
+  submitStory = async () => {
+    if (
+      this.state.title &&
+      this.state.moral &&
+      this.state.description &&
+      this.state.story
+    ) {
+      await firebase
+        .database()
+        .ref("stories/" + Math.random().toString(32).slice(2))
+        .update({
+          previewImage: this.state.previewImage,
+          title: this.state.title,
+          description: this.state.description,
+          story: this.state.story,
+          moral: this.state.moral,
+          author: firebase.auth().currentUser.displayName,
+          likes: 0,
+          authorUid: firebase.auth().currentUser.uid,
+        })
+        this.props.navigation.navigate('feed')
+    } else {
+      Alert.alert("Error", "All fields are required", [
+        {
+          text: "Ok",
+          onPress: () => {
+            console.log("okPressed");
+          },
+        },
+      ]);
+    }
+  };
   render() {
     if (this.state.fontsLoaded) {
       var previewImages = {
@@ -69,7 +101,13 @@ export default class FeedRead extends React.Component {
         image_5: require("../assets/story_image_5.png"),
       };
       return (
-        <View style={this.state.lightTheme?styles.container:[styles.container,{backgroundColor:'grey'}]}>
+        <View
+          style={
+            this.state.lightTheme
+              ? styles.container
+              : [styles.container, { backgroundColor: "grey" }]
+          }
+        >
           <SafeAreaView style={styles.droidSafeArea} />
           <Text style={styles.title}>Create Story</Text>
           <ScrollView>
@@ -119,7 +157,7 @@ export default class FeedRead extends React.Component {
                 }}
               />
               <TextInput
-                style={styles.inputs}
+                style={[styles.inputs,{height:50}]}
                 placeholder="Describe it"
                 multiline={true}
                 onChangeText={(item) => {
@@ -127,7 +165,7 @@ export default class FeedRead extends React.Component {
                 }}
               />
               <TextInput
-                style={styles.inputs}
+                style={[styles.inputs,{height:50}]}
                 placeholder="Story"
                 multiline={true}
                 onChangeText={(item) => {
@@ -135,7 +173,7 @@ export default class FeedRead extends React.Component {
                 }}
               />
               <TextInput
-                style={styles.inputs}
+                style={[styles.inputs,{height:50}]}
                 placeholder="moral"
                 multiline={true}
                 onChangeText={(item) => {
@@ -143,6 +181,14 @@ export default class FeedRead extends React.Component {
                 }}
               />
             </View>
+            <TouchableOpacity
+              stlye={styles.button}
+              onPress={() => {
+                this.submitStory();
+              }}
+            >
+              <Text>Create Story</Text>
+            </TouchableOpacity>
           </ScrollView>
         </View>
       );
@@ -159,6 +205,15 @@ const styles = StyleSheet.create({
     backgroundColor: "#0009ff",
     borderRadius: 20,
     margin: 10,
+  },
+  button: {
+    padding: 5,
+    alignItems: "center",
+    alignSelf: "center",
+    flexDirection: "row",
+    borderWidth: 0.5,
+    borderRadius: 3,
+    marginTop: RFValue(30),
   },
 
   inputs: {
