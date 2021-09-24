@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   StatusBar,
   Switch,
+  Image
 } from "react-native";
 import firebase from "firebase";
 import { RFValue } from "react-native-responsive-fontsize";
@@ -70,7 +71,9 @@ export default class FeedRead extends React.Component {
       return (
         <View style={this.state.isEnabled?styles.container:styles.containerLT}>
           <SafeAreaView style={styles.droidSafeArea} />
+          <Image source={{uri:this.state.profileImage}} style={{width:100,height:100}}/>
           <Text style={styles.title}>{this.state.name}</Text>
+          
           <View style={{ flexDirection: "row" }}>
             <Text style={{color:this.state.isEnabled?'white':'black'}}>Dark Theme</Text>
             <Switch

@@ -8,7 +8,7 @@ import StoryCard from "../components/storyCard";
 let customFonts = {
   "bubblegum-sans": require("../assets/fonts/BubblegumSans-Regular.ttf"),
 };
-let stories = require("../temp_stories.json");
+
 export default class FeedRead extends React.Component {
   constructor(props) {
     super(props);
@@ -31,8 +31,10 @@ export default class FeedRead extends React.Component {
         .forEach((key)=>{
             stories.push({key:key,value:data.val()[key]})
         })
-      }
+        
       this.setState({stories:stories})
+      console.log(data.val())
+      }
 
     })
   }
