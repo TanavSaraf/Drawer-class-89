@@ -1,5 +1,6 @@
 import AppLoading from "expo-app-loading";
 import React from "react";
+import firebase from 'firebase';
 import { StyleSheet, Text, View,Platform,SafeAreaView,StatusBar } from "react-native";
 import { RFValue } from "react-native-responsive-fontsize";
 import * as Font from "expo-font";
@@ -40,6 +41,7 @@ export default class FeedRead extends React.Component {
   }
   componentDidMount() {
     this.loadFontAsync();
+    this.fetchStories()
   }
   renderItem = ({ item, index }) => {
     return <StoryCard story={item} navigation={this.props.navigation}/>;
@@ -83,5 +85,20 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     margin:10,
     textAlign:'center'
-  }
+  },  title: {
+    fontFamily: "bubblegum-sans",
+    fontSize: RFValue(20),
+    color: "white",
+  },
+  description: {
+    fontFamily: "bubblegum-sans",
+    fontSize: RFValue(10),
+    color: "grey",
+  },
+
+  author: {
+    fontFamily: "bubblegum-sans",
+    fontSize: RFValue(10),
+    color: "#ffffdd",
+  },
 });

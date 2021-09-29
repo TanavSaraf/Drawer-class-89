@@ -31,13 +31,13 @@ export default class FeedRead extends React.Component {
         onPress={()=>{
           this.props.navigation.navigate('FullStory',{story:this.props.story})
         }}>
-          <Text style={styles.title}>{this.props.story.title}</Text>
+          <Text style={styles.title}>{this.props.story.value.title}</Text>
           <Image
             source={require("../assets/story_image_1.png")}
             style={{ width: RFValue(100), height: RFValue(100) }}
           />
-          <Text style={styles.description}>{this.props.story.description}</Text>
-          <Text style={styles.author}>{this.props.story.author}</Text>
+          <Text style={styles.description}>{this.props.story.value.description}</Text>
+          <Text style={styles.author}>{this.props.story.value.author}</Text>
         </TouchableOpacity>
       );
     } else {

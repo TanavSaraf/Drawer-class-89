@@ -20,7 +20,7 @@ let customFonts = {
   "bubblegum-sans": require("../assets/fonts/BubblegumSans-Regular.ttf"),
 };
 
-export default class FeedRead extends React.Component {
+export default class BookProv extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -28,25 +28,31 @@ export default class FeedRead extends React.Component {
       bookName: "",
       dataSrc: "",
       userId: firebase.auth().currentUser.email,
+      req: [],
     };
   }
   async loadFontAsync() {
     await Font.loadAsync(customFonts);
     this.setState({ fontsLoaded: true });
   }
-  fetchBook = async (bookName) => {
-    if (bookName.length > 2) {
-      var book = await BookSearch.searchbook(
-        bookName,
-        "AIzaSyA7wWcuJkBkmT5l_TGNmbq32q24KOYsOR4"
-      );
-      console.log(book);
-      this.setState({
-        dataSrc: book.data,
+  fetchBooks = () => {
+    firebase
+      .database()
+      .ref("requestedBooks")
+      .on("value", (data) => {
+        var books = [];
+        if (data.val()) {
+          Object.keys(data.val()).forEach((key) => {
+            books.push({ key: key, value: data.val()[key] });
+          });
+
+          this.setState({ req: books });
+          console.log(data.val());
+        }
       });
-    }
   };
   componentDidMount() {
+    this.fetchBooks();
     this.loadFontAsync();
   }
   renderItem = ({ item, index }) => {
@@ -66,48 +72,26 @@ export default class FeedRead extends React.Component {
         }}
       >
         <Text style={{ fontSize: 20, width: "60%" }}>
-          {item.volumeInfo.title}
+          {item.value.bookName}
         </Text>
         <Image
-          source={{ uri: item.volumeInfo.imageLinks.smallThumbnail }}
+          source={{ uri: item.value.imageLink }}
           style={{ width: 50, height: 70, borderRadius: 2 }}
         />
       </TouchableOpacity>
     );
   };
-  addReq = async (item) => {
-    var reqId = Math.random().toString(36).substring(3);
-    firebase
-      .database()
-      .ref("requestedBooks/" + reqId)
-      .update({
-        userId: this.state.userId,
-        bookName: item.volumeInfo.title,
-        imageLink: item.volumeInfo.imageLinks.smallThumbnail,
-        reqId: reqId,
-      });
-  };
+
   render() {
+    console.log(this.state.req)
     if (this.state.fontsLoaded) {
       return (
         <View style={styles.container}>
           <SafeAreaView style={styles.droidSafeArea} />
           <Text style={styles.title}>Request Books from Other Users </Text>
-          <TextInput
-            style={styles.inputs}
-            onChangeText={(text) => {
-              this.setState({ bookName: text });
-            }}
-          />
-          <TouchableOpacity
-            onPress={() => {
-              this.fetchBook(this.state.bookName);
-            }}
-          >
-            <Text>Search</Text>
-          </TouchableOpacity>
+          
           <FlatList
-            data={this.state.dataSrc}
+            data={this.state.req}
             keyExtractor={(item, index) => {
               return index.toString();
             }}

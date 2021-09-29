@@ -56,17 +56,17 @@ export default class Read extends React.Component {
           <Text style={styles.title}>
             {this.props.route.params.story.title}
           </Text>
-          <Text>{this.props.route.params.story.author}</Text>
-          <Text>{this.props.route.params.story.story}</Text>
-          <Text>{this.props.route.params.story.created_on}</Text>
-          <Text>{this.props.route.params.story.moral}</Text>
+          <Text>{this.props.route.params.story.value.author}</Text>
+          <Text>{this.props.route.params.story.value.story}</Text>
+          <Text>{this.props.route.params.story.value.created_on}</Text>
+          <Text>{this.props.route.params.story.value.moral}</Text>
           <TouchableOpacity
             onPress={() => {
               this.initiateTTS(
-                this.props.route.params.story.title,
-                this.props.route.params.story.author,
-                this.props.route.params.story.story,
-                this.props.route.params.story.moral
+                this.props.route.params.story.value.title,
+                this.props.route.params.story.value.author,
+                this.props.route.params.story.value.story,
+                this.props.route.params.story.value.moral
               );
             }}
           >
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     flex: 1,
     margin: 2,
     borderWidth: 2,
-    backgroundColor: "#000000",
+    backgroundColor: "white",
     borderRadius: 20,
     margin: 10,
   },
@@ -100,18 +100,17 @@ const styles = StyleSheet.create({
     fontFamily: "bubblegum-sans",
     fontSize: RFValue(20),
     color: "white",
-    borderWidth: 2,
-    borderRadius: 5,
-    margin: 10,
-    textAlign: "center",
   },
-  story: {
+  description: {
     fontFamily: "bubblegum-sans",
-    fontSize: RFValue(15),
-    color: "white",
-    borderWidth: 2,
-    borderRadius: 5,
-    margin: 10,
-    textAlign: "center",
+    fontSize: RFValue(10),
+    color: "grey",
   },
+
+  author: {
+    fontFamily: "bubblegum-sans",
+    fontSize: RFValue(10),
+    color: "#ffffdd",
+  },
+  
 });
